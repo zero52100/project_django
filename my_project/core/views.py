@@ -6,18 +6,7 @@ from job.models import Job
 from userprofile.models import Userprofile
 from .forms import CustomUserCreationForm 
 from django.contrib.auth.decorators import user_passes_test
-@user_passes_test(lambda u: u.is_superuser)
-def admin_dashboard(request):
-    # Retrieve required information
-    total_jobs = Job.objects.count()
-    total_employers = Userprofile.objects.filter(is_employer=True).count()
-    total_employees = Userprofile.objects.filter(is_employer=False).count()
 
-    return render(request, 'core/admin_dashboard.html', {
-        'total_jobs': total_jobs,
-        'total_employers': total_employers,
-        'total_employees': total_employees,
-    })
 def frontpage(request):
     jobs = Job.objects.filter(status=Job.ACTIVE).order_by('-created_at')[0:3]
 

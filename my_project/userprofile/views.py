@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.models import User
 
 from job.models import Job, Application
 from .models import ConversationMessage
@@ -22,29 +23,16 @@ def serve_resume(request, resume_filename):
 def dashboard(request):
     userprofile = request.user.userprofile
     
-    # Handle POST request to update user information
-    if request.method == 'POST':
-        cover_letter = request.POST.get('cover_letter')
-        resume = request.FILES.get('resume')
-        
-        if cover_letter:
-            userprofile.cover_letter = cover_letter
-        if resume:
-            userprofile.resume = resume
-        
-        userprofile.save()
-        
-        if userprofile.is_employer:
-            company_name = request.POST.get('company_name')
-            designation = request.POST.get('designation')
-            if company_name:
-                request.user.profile.company_name = company_name
-            if designation:
-                request.user.profile.designation = designation
-            request.user.profile.save()
-        
-        return redirect('dashboard')
-
+    # Check if the user is authorized to view the restricted dashboard
+    if request.user.email == 'tewest2@gmail.com':
+        # Gather statistics for all users
+        total_employers = Userprofile.objects.filter(is_employer=True).count()
+        total_employees = Userprofile.objects.filter(is_employer=False).count()
+        total_jobs = Job.objects.all().count()
+        all_users = User.objects.all()
+        return render(request, 'userprofile/restricted_dashboard.html', {'total_employers': total_employers, 'total_employees': total_employees, 'total_jobs': total_jobs,'all_users': all_users})
+    
+    # Normal dashboard view for other users
     gender = request.user.profile.gender
     company_name = None
     designation = None
@@ -54,7 +42,6 @@ def dashboard(request):
         designation = request.user.profile.designation
 
     return render(request, 'userprofile/dashboard.html', {'userprofile': userprofile, 'company_name': company_name, 'designation': designation, 'gender': gender})
-
 
 @login_required
 def view_application(request, application_id):
@@ -103,3 +90,8 @@ def view_dashboard_job(request, job_id):
     job = get_object_or_404(Job, pk=job_id, created_by=request.user)
 
     return render(request, 'userprofile/view_dashboard_job.html', {'job': job})
+@login_required
+def delete_user(request, user_id):
+    user = get_object_or_404(User, pk=user_id)
+    user.delete()
+    return redirect('admin_dashboard')

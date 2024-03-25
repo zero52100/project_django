@@ -17,6 +17,7 @@
                                 <select name="account_type" id="account_type">
                                     <option value="jobseeker" selected>Job Seeker</option>
                                     <option value="employer">Employer/Recruiter</option>
+                                    <option value="admin">Admin</option>
                                 </select>
                             </div>
                         </div>
@@ -87,9 +88,18 @@
                                         <option value="hr">HR</option>
                                         <option value="ceo">CEO</option>
                                         <option value="manager">Manager</option>
-                                        
                                     </select>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Additional Fields for Admin -->
+                    <div id="admin_fields" style="display: none;">
+                        <div class="field">
+                            <label class="label">Admin Code</label>
+                            <div class="control">
+                                <input class="input" type="password" name="admin_code" required>
                             </div>
                         </div>
                     </div>
@@ -107,10 +117,16 @@
     <script>
         document.getElementById('account_type').addEventListener('change', function() {
             var employerFields = document.getElementById('employer_fields');
+            var adminFields = document.getElementById('admin_fields');
             if (this.value === 'employer') {
                 employerFields.style.display = 'block';
+                adminFields.style.display = 'none';
+            } else if (this.value === 'admin') {
+                adminFields.style.display = 'block';
+                employerFields.style.display = 'none';
             } else {
                 employerFields.style.display = 'none';
+                adminFields.style.display = 'none';
             }
         });
     </script>

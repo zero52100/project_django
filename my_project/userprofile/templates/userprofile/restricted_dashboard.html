@@ -1,0 +1,39 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+    <h1 class="title">Admin Dashboard</h1>
+
+    <div class="statistics">
+        <h2 class="subtitle">Database Statistics</h2>
+        <p><strong>Total Employers:</strong> {{ total_employers }}</p>
+        <p><strong>Total Employees:</strong> {{ total_employees }}</p>
+        <p><strong>Total Jobs:</strong> {{ total_jobs }}</p>
+    </div>
+
+    <div class="user-list">
+        <h2 class="subtitle">User List</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Actions</th> <!-- Add a column for actions -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in all_users %}
+                    <tr>
+                        <td>{{ user.first_name }} {{ user.last_name }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>
+                            <form action="{% url 'delete_user' user.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

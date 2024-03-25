@@ -18,7 +18,7 @@
 </div>
 
 
-{% if not userprofile.is_employer %}
+{% if not userprofile.is_employer%}
 <h2 class="subtitle">Job Seeker Information</h2>
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
