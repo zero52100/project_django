@@ -1,0 +1,66 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+    <h1 class="title">Apply for job - {{ job.title }}</h1>
+
+    {% if user_has_applied %}
+        <p>You have already applied for this job.</p>
+    {% else %}
+        <form method="post" action="." enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {% if form.errors %}
+                {% for error in form.errors %}
+                    <div class="notification is-danger">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <div class="field">
+                <label>Cover letter</label>
+                <div class="control">
+                    <textarea class="textarea" name="content" id="id_content">{{ form.content.value }}</textarea>
+                </div>
+            </div>
+
+            <div class="field">
+                <label>Experience</label>
+                <div class="control">
+                    <input class="input" type="text" name="experience" id="id_experience" value="{{ form.experience.value }}">
+                </div>
+            </div>
+
+            <div class="field">
+                <label>Name</label>
+                <div class="control">
+                    <input class="input" type="text" name="name" id="id_name" value="{{ form.initial.name }}">
+                </div>
+            </div>
+
+            <div class="field">
+                <label>Email</label>
+                <div class="control">
+                    <input class="input" type="email" name="email" id="id_email" value="{{ form.initial.email }}">
+                </div>
+            </div>
+
+            <div class="field">
+                <label>Resume</label>
+                <div class="control">
+                    <input type="file" name="resume" id="id_resume">
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="control">
+                    {% if user_has_applied %}
+                        <button class="button is-success" disabled>Applied</button>
+                    {% else %}
+                        <button class="button is-success">Apply for job</button>
+                    {% endif %}
+                </div>
+            </div>
+        </form>
+    {% endif %}
+{% endblock %}

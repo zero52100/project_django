@@ -1,0 +1,74 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+    <h1 class="title">Dashboard</h1>
+
+    <div class="user-info">
+    <h2 class="subtitle">User Information</h2>
+    <p><strong>Name:</strong> {{ userprofile.user.first_name }}</p>
+    <p><strong>Email:</strong> {{ userprofile.user.email }}</p>
+    <p><strong>Gender:</strong> {{ gender }}</p>
+    {% if company_name %}
+        <p><strong>Company Name:</strong> {{ company_name }}</p>
+    {% endif %}
+    {% if designation %}
+        <p><strong>Designation:</strong> {{ designation }}</p>
+    {% endif %}
+    <a href="{% url 'edit_profile' %}" class="button is-primary">Edit</a>
+</div>
+
+
+{% if not userprofile.is_employer %}
+<h2 class="subtitle">Job Seeker Information</h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <!-- Add fields for cover letter, resume -->
+    <div class="field">
+        <label class="label">Cover Letter</label>
+        <div class="control">
+            <textarea class="textarea" name="cover_letter">{{ userprofile.cover_letter }}</textarea>
+        </div>
+    </div>
+    <div class="field">
+        <label class="label">Resume</label>
+        <div class="control">
+            <!-- Display the resume file -->
+            {% if userprofile.resume %}
+    <a href="{% url 'serve_resume' 'resumes/'|add:userprofile.resume.name %}" target="_blank">View Resume</a>
+{% else %}
+    <p>No resume uploaded</p>
+{% endif %}
+        </div>
+    </div>
+    <div class="field">
+        <div class="control">
+            <button type="submit" class="button is-success">Update Information</button>
+        </div>
+    </div>
+</form>
+{% endif %}
+    
+    {% if userprofile.is_employer %}
+        <h2 class="subtitle">Jobs</h2>
+
+        <a href="{% url 'add_job' %}" class="button is-success">Add job</a>
+
+        {% for job in request.user.jobs.all %}
+            <div class="job">
+                <a href="{% url 'view_dashboard_job' job.id %}">{{ job.title }} ({{ job.get_status_display }})</a>
+            </div>
+        {% empty %}
+            <p>You don't have any jobs yet...</p>
+        {% endfor %}
+    {% else %}
+        <h2 class="subtitle">Applications</h2>
+
+        {% for application in request.user.applications.all %}
+            <div class="application">
+                <a href="{% url 'view_application' application.id %}">{{ application.job.title }}</a>
+            </div>
+        {% empty %}
+            <p>You haven't applied for any jobs yet...</p>
+        {% endfor %}
+    {% endif %}
+{% endblock %}

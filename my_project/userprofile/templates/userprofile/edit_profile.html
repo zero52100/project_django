@@ -1,0 +1,39 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% if not userprofile.is_employer %}
+    <div class="field">
+        <label class="label">Cover Letter</label>
+        <div class="control">
+            <!-- Display cover letter for job seekers only -->
+            
+                <textarea class="textarea" name="cover_letter">{{ userprofile.cover_letter }}</textarea>
+           
+           
+        </div>
+    </div>
+    {% endif %}
+    {% if userprofile.is_employer %}
+        <div class="field">
+            <label class="label">Company Name</label>
+            <div class="control">
+                <!-- Display current value for company name -->
+                <input class="input" type="text" name="company_name" value="{{ user.profile.company_name }}">
+            </div>
+        </div>
+        <div class="field">
+            <label class="label">Designation</label>
+            <div class="control">
+                <!-- Display current value for designation -->
+                <input class="input" type="text" name="designation" value="{{ user.profile.designation }}">
+            </div>
+        </div>
+    {% endif %}
+    <div class="field">
+        <div class="control">
+            <button type="submit" class="button is-success">Save Changes</button>
+        </div>
+    </div>
+</form>
+{% endblock %}
