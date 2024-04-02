@@ -1,0 +1,48 @@
+{% include 'users/navbar.html' %}
+<div style="max-width: 400px; margin: 20px auto 0; padding: 20px; border: 1px solid #ccc; border-radius: 5px; background-color: #f9f9f9;">
+    <h1 style="text-align: center;">Signup</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <div style="margin-bottom: 10px;">
+            {{ form.full_name.label_tag }}
+            {{ form.full_name }}
+        </div>
+        
+        
+        <div style="margin-bottom: 10px;">
+            {{ form.username.label_tag }}
+            {{ form.username }}
+            <div style="font-size: 12px; color: #6c757d;">{{ form.username.help_text }}</div>
+        </div>
+        
+        
+        <div style="margin-bottom: 10px;">
+            {{ form.email.label_tag }}
+            {{ form.email }}
+            <div style="font-size: 12px; color: #6c757d;">{{ form.email.help_text }}</div>
+        </div>
+        
+        
+        <div style="margin-bottom: 10px;">
+            {{ form.password1.label_tag }}
+            {{ form.password1 }}
+            <div style="font-size: 12px; color: #6c757d;">{{ form.password1.help_text }}</div>
+        </div>
+        
+        
+        <div style="margin-bottom: 10px;">
+            {{ form.password2.label_tag }}
+            {{ form.password2 }}
+            <div style="font-size: 12px; color: #6c757d;">{{ form.password2.help_text }}</div>
+        </div>
+        
+        
+        <div style="margin-bottom: 10px;">
+            {{ form.user_type.label_tag }}
+            {{ form.user_type }}
+        </div>
+        
+        <button type="submit" style="background-color: #28a745; color: #fff; padding: 10px 20px; border: none; cursor: pointer; margin-top: 10px;">Signup</button>
+        <a href="{% url 'login' %}" style="display: block; margin-top: 10px; text-decoration: none; color: #007bff;">Already have an account?</a>
+    </form>
+</div>

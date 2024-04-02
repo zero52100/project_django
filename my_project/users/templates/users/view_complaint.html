@@ -1,0 +1,39 @@
+{% include 'users/navbar.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Complaints</title>
+    
+</head>
+<body>
+    <h1>View Complaints</h1>
+    <form method="POST" action="{% url 'view_complaint' %}">
+        {% csrf_token %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Complaint Type</th>
+                    <th>Message</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for complaint in complaints %}
+                <tr>
+                    <td>{{ complaint.get_complaint_type_display }}</td>
+                    <td>{{ complaint.message }}</td>
+                    <td>{{ complaint.get_status_display }}</td>
+                    <td>
+                        {% if complaint.status != 'solved' %}
+                        <button type="submit" name="complaint_id" value="{{ complaint.id }}">Mark as Solved</button>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </form>
+</body>
+</html>

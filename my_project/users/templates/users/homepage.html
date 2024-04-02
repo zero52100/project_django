@@ -1,0 +1,159 @@
+{% include 'users/navbar.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employeer Home</title>
+    
+    <style>
+       
+        .container1 {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .search-box {
+            width: 600px; 
+            padding: 10px;
+            border: 1px solid #060000;
+            border-radius: 15px;
+            margin-bottom: 10px;
+        }
+        .search-button {
+            padding: 10px 20px;
+            background-color: #007bff; 
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+        }
+
+        .search-button:hover {
+            background-color: #0056b3; 
+        }
+        
+        .job-listing-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .job-listing {
+            width: calc(33.33% - 50px); 
+            border: 1px solid #ccc;
+            margin: 3px;
+            padding: 20px;
+        }
+        .job-listing h2 {
+            font-size: 30px;
+            margin-bottom: 15px;
+        }
+        .job-listing p {
+            margin: 5px 0;
+            font-size: 20px;
+        }
+        .filter-box-container{
+            
+            border: 3px solid #ccc;
+            margin: 3px;
+            padding: 20px;
+            
+            width:300px;
+            
+
+        }
+        .filter-box {
+            font-size: 15px;
+            
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="container1">
+    <h1>Welcokme</h1>
+    <div class="filter-box-container">
+    <div class="filter-box">
+        <h2>Filter</h2>
+        
+        <form method="GET" action="{% url 'home' %}">
+            <div class="form-group">
+                <label for="employment_type">Work Mode:</label>
+                <select name="employment_type" id="employment_type">
+                    <option value="">Select Work Mode</option>
+                    <option value="work_from_home">Work From Home</option>
+                    <option value="work_from_office">Work From Office</option>
+                    <option value="hybrid">Hybrid</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="industry">Industry:</label>
+                <select name="industry" id="industry">
+                    <option value="">Select Industry</option>
+                    <option value="IT">Information Technology</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Education">Education</option>
+                    <option value="Manufacturing">Manufacturing</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="location">Location:</label>
+                <select name="location" id="location">
+                    <option value="">Select Location </option>
+                    <option value="calicut">Calicut</option>
+                    <option value="kochi">Kochi</option>
+                    <option value="bengaluru">Bengaluru</option>
+                    <option value="Pune">Pune</option>
+                    
+                </select>
+            </div>
+            <button type="submit">Apply Filters</button>
+        </form>
+    </div>
+    <!-- Sort Box -->
+    <div class="sort-box">
+        <h2>Sort by:</h2>
+        <form method="GET" action="{% url 'home' %}">
+            <select name="sort_by" id="sort_by">
+                <option value="">Select Sorting Option</option>
+                <option value="within_12_hours">Within 12 Hours</option>
+                <option value="within_24_hours">Within 24 Hours</option>
+                <option value="within_7_days">Within 7 Days</option>
+                <option value="within_1_month">Within 1 Month</option>
+            </select>
+            <button type="submit">Sort</button>
+        </form>
+    </div>
+    </div>
+    
+
+    <!-- Search box -->
+    <form method="GET" action="{% url 'home' %}">
+        <input type="text" name="search" placeholder="Search by Job,location,company name" class="search-box">
+        <button type="submit" class="search-button">Search</button>
+    </form>
+    
+   
+<div class="job-listing-container">
+    {% for job in job_listings %}
+    <div class="job-listing">
+        <h2>
+            {% if request.user.is_authenticated %}
+                <a href="{% url 'job_seeker:job_detail' job.id %}">{{ job.title }}</a>
+            {% else %}
+                <a href="{% url 'login' %}?next={{ request.path }}">{{ job.title }}</a>
+            {% endif %}
+        </h2>
+        <p><strong>Company:</strong> {{ job.company_name }}</p>
+        <p><strong>Salary:</strong> {{ job.salary_range }}</p>
+        <p><strong>Date Posted:</strong> {{ job.date_added }}</p>
+        <p><strong>Deadline:</strong> {{ job.application_deadline }}</p>
+       
+    </div>
+    {% empty %}
+    <p>No job listings available.</p>
+    {% endfor %}
+</div>
+
+</div>
+</body>
+</html>

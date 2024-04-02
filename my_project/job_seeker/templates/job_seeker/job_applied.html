@@ -1,0 +1,53 @@
+{% include 'users/navbar.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    
+    <style>
+        
+        
+        .job-listing-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .job-listing {
+            width: calc(33.33% - 50px); 
+            border: 1px solid #ccc;
+            margin: 3px;
+            padding: 20px;
+        }
+        .job-listing h2 {
+            font-size: 30px;
+            margin-bottom: 15px;
+        }
+        .job-listing p {
+            margin: 5px 0;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    
+    <h1>Applied Job</h1>
+    
+   
+    
+    
+    <div class="job-listing-container">
+        {% for application in job_applied %}
+        <div class="job-listing">
+            <h2>{{ job.title }}</h2>
+            <p><strong>Company:</strong> {{ application.job.company_name }}</p>
+            <p><strong>Position:</strong> {{ application.job.title }}</p>
+            <p><strong>Status:</strong> {{ application.status }}</p>
+           
+        </div>
+        {% empty %}
+        <p>No job listings available.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>

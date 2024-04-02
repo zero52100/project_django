@@ -1,0 +1,59 @@
+{% include 'users/navbar.html' %}
+
+<h2>Total Job Seekers: {{ total_job_seekers }}</h2>
+<h2>Total Employers: {{ total_employers }}</h2>
+<h2>Total Jobs: {{ total_jobs }}</h2>
+
+
+
+<table>
+  <h2 >Job Seekers</h2>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for job_seeker in job_seekers %}
+      <tr>
+        <td>{{ job_seeker.user.userprofile.full_name }}</td>
+        <td>{{ job_seeker.user.email }}</td>
+        <td>
+          <form action="{% url 'admin1:delete_user' job_seeker.user.id %}" method="post">
+
+            {% csrf_token %}
+            <button type="submit">Delete</button>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<table>
+    <h2 >Employers</h2>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Action</th> <!-- New column for delete button -->
+    </tr>
+  </thead>
+  <tbody>
+    {% for employer in employers %}
+      <tr>
+        <td>{{ employer.user.userprofile.full_name }}</td>
+        <td>{{ employer.user.email }}</td>
+        <td>
+          <form action="{% url 'admin1:delete_user' employer.user.id %}" method="post">
+
+            {% csrf_token %}
+            <button type="submit">Delete</button>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>

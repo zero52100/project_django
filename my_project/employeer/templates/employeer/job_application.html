@@ -1,0 +1,64 @@
+{% include 'users/navbar.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    
+    <style>
+        
+        
+        .job-listing-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .job-listing {
+            width: calc(33.33% - 50px); 
+            border: 1px solid #ccc;
+            margin: 3px;
+            padding: 20px;
+        }
+        .job-listing h2 {
+            font-size: 30px;
+            margin-bottom: 15px;
+        }
+        .job-listing p {
+            margin: 5px 0;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    
+    <h1>Applied Job</h1>
+    
+   
+    
+    
+    <div class="job-listing-container">
+        {% for item in application %}
+        <div class="job-listing">
+        
+            <p><strong>Username:</strong> {{ item.user.username }}</p>
+            <p><strong>Coverletter:</strong> {{ item.cover_letter }}</p>
+            <p><strong>Resume:</strong> {% if item.resume %}
+                <a href="{{ item.resume.url }}" class="resume-link" download>Download Resume</a>
+                {% endif %}</p>
+            <p><strong>Email:</strong> {{ item.email }}</p>
+            <p><strong>Status:</strong> {{ item.status }}</p>
+            
+            {% if item.status not in 'ACCEPTED,REJECTED' %}
+            <form method="POST" action="{% url 'employeer:update_status' item.id %}">
+                {% csrf_token %}
+                <button type="submit" name="status" value="ACCEPTED">Accept</button>
+                <button type="submit" name="status" value="REJECTED">Reject</button>
+            </form>
+            {% endif %}
+        </div>
+        {% empty %}
+        <p>No job listings available.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>

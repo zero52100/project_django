@@ -1,0 +1,28 @@
+{% include 'users/navbar.html' %}
+{% block content %}
+    <h2>{{ job.title }}</h2>
+    <p><strong>Company:</strong> {{ job.company_name }}</p>
+    <p><strong>Salary:</strong> {{ job.salary_range }}</p>
+    <p><strong>Date Posted:</strong> {{ job.date_added }}</p>
+    <p><strong>Deadline:</strong> {{ job.application_deadline }}</p>
+    <p><strong>Description:</strong> {{ job.description }}</p>
+    <p><strong>Responsibilities:</strong> {{ job.responsibilities }}</p>
+    <p><strong>Work Mode:</strong> {{ job.employment_type}}</p>
+    <p><strong>Location:</strong> {{ job.location }}</p>
+    <p><strong>Benefits:</strong> {{ job.company_benefits}}</p>
+    <p><strong>Required Qualifications:</strong> {{ job.required_qualifications}}</p>
+    <p><strong>Desired Qualifications:</strong> {{ job.desired_qualifications}}</p>
+    <p><strong>How To Apply:</strong> {{ job.how_to_apply}}</p>
+    <p><strong>Other Information:</strong> {{ job.other_information}}</p>
+
+
+
+    
+   
+    {% if user_has_applied %}
+        <p><strong>Status:</strong> Applied</p>
+    {% else %}
+        
+        <a href="{% url 'job_seeker:apply_job' job.id %}">Apply Now</a>
+    {% endif %}
+{% endblock %}

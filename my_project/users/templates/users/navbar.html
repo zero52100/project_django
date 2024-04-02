@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lead</title>
+    <style>
+        header {
+            background-color: #111111;
+            padding: 10px 0;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .company-name h1 {
+            margin: 0;
+            color: #008cba;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            font-size: 25px;
+        }
+
+        nav ul li a {
+            color: #4caf50;
+            text-decoration: none;
+            margin-left: 20px;
+        }   
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="company-name">
+                <h1>Lead Job Portal</h1>
+            </div>
+            <nav>
+                <ul>
+                    {% if request.user.is_authenticated %}
+                        {% if request.user.is_superuser %}
+                        <li><a href="{% url 'admin1:admin1_home' %}">Home</a></li>
+                            <li><a href="{% url 'admin:index' %}">Admin</a></li>
+                            <li><a href="{% url 'view_complaint' %}">View Complaints</a></li>
+                        {% else %}
+                            {% if request.user.userprofile.user_type == 'job_seeker' %}
+                                <li><a href="{% url 'job_seeker:profile' %}">Profile</a></li>
+                                <li><a href="{% url 'job_seeker:job_applied' %}">Job Applied</a></li>
+                                <li><a href="{% url 'complaint' %}">Complaint</a></li>
+                            {% else %}
+                                <li><a href="{% url 'employeer:employeer_home' %}">Home</a></li>
+                                <li><a href="{% url 'employeer:employeer_profile' %}">Profile</a></li>
+                                <li><a href="{% url 'employeer:add_job' %}">Add Job</a></li>
+                                <li><a href="{% url 'employeer:job_application' %}">Application</a></li>
+                                <li><a href="{% url 'complaint' %}">Complaint</a></li>
+                            {% endif %}
+                        {% endif %}
+                        <li><a href="{% url 'logout' %}">Logout</a></li>
+                        
+                    {% else %}
+                        <li><a href="{% url 'home' %}">Home</a></li>
+                        <li><a href="{% url 'login' %}">Login</a></li>
+                        <li><a href="{% url 'signup' %}">Signup</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+</body>
+</html>

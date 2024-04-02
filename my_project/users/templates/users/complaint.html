@@ -1,0 +1,30 @@
+{% include 'users/navbar.html' %}
+
+<h2>File a Complaint</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit</button>
+</form>
+
+<h2>Registered Complaints</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Complaint Type</th>
+      <th>Message</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for complaint in complaints %}
+    <tr>
+      <td>{{ complaint.get_complaint_type_display }}</td>
+      <td>{{ complaint.message }}</td>
+      <td>{{ complaint.get_status_display }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
