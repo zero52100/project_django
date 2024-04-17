@@ -24,7 +24,7 @@ def employeer_profile(request):
             employeer.email = form.cleaned_data['email']
             employeer.save()
 
-            # Update designation for the associated company
+            
             company = request.user.company
             company.company_name=form.cleaned_data['company_name']
             company.designation = form.cleaned_data['designation']
@@ -76,7 +76,10 @@ def employeer_home(request):
     
     return render(request, 'employeer/employeer_home.html', {'job_listings': job_listings})
 def job_application(request):
-    application=JobApplication.objects.all()
+    
+    user_company_jobs = request.user.company.job_set.all()
+    job_ids = user_company_jobs.values_list('id', flat=True)
+    application = JobApplication.objects.filter(job_id__in=job_ids)
     return render(request, 'employeer/job_application.html', {'application': application})
 def update_status(request, application_id):
     application = get_object_or_404(JobApplication, id=application_id)

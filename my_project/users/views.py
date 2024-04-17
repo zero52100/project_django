@@ -8,18 +8,17 @@ from datetime import timedelta
 from django.utils import timezone
 from django.contrib.auth.models import User, Group
 from .models import Complaint
+from django.contrib import messages
 
 def homepage(request):
     job_listings = Job.objects.all()
-
-    # Get filter values from the request
     employment_type = request.GET.get('employment_type')
     industry = request.GET.get('industry')
     location = request.GET.get('location')
     search_query = request.GET.get('search')
     sort_by = request.GET.get('sort_by')
 
-    # Apply filters to the job listings
+  
     if employment_type:
         job_listings = job_listings.filter(employment_type=employment_type)
     if industry:
@@ -33,7 +32,7 @@ def homepage(request):
             Q(location__icontains=search_query) |
             Q(company_name__company_name__icontains=search_query)
         )
-    # Apply sorting to the job listings
+    
     if sort_by == 'within_12_hours':
         job_listings = job_listings.filter(date_added__gte=timezone.now() - timedelta(hours=2))
     elif sort_by == 'within_24_hours':
@@ -78,13 +77,15 @@ def user_login(request):
             if user is not None:
                 login(request, user)
                 if user.is_superuser:
-                    return redirect('admin1:admin1_home') # Redirect to admin homepage
+                    return redirect('admin1:admin1_home') 
                 elif user.userprofile.user_type == 'employer':
                     return redirect('employeer:employeer_home')
                 else:
                     return redirect('home')
             else:
-                form.add_error(None, 'Invalid username or password')
+
+                messages.error(request, 'Invalid username or password')
+                
     else:
         form = LoginForm() 
     return render(request, 'users/login.html', {'form': form})
@@ -98,7 +99,7 @@ def complaint(request):
         if form.is_valid():
             complaint = form.save(commit=False)
             complaint.user = request.user
-            complaint.usertype=request.user.userprofile.user_type # Set the user field to the current user
+            complaint.usertype=request.user.userprofile.user_type
             complaint.save()
             return redirect('home1')
     else:

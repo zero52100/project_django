@@ -6,7 +6,7 @@ from .models import Job
 class ProfileForm(forms.ModelForm):
     email = forms.EmailField(label='Email')
     company_name = forms.CharField(label='Company Name')
-    company = Company.objects.first()  # Assuming there's always at least one company
+    company = Company.objects.first()  
     DESIGNATION_CHOICES = company.DESIGNATION_CHOICES
 
     designation = forms.ChoiceField(

@@ -39,7 +39,7 @@
     <div class="job-listing-container">
         {% for item in application %}
         <div class="job-listing">
-        
+            <p><strong>Job Id:</strong> {{ item.job_id}}</p>
             <p><strong>Username:</strong> {{ item.user.username }}</p>
             <p><strong>Coverletter:</strong> {{ item.cover_letter }}</p>
             <p><strong>Resume:</strong> {% if item.resume %}
